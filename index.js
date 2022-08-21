@@ -19,7 +19,10 @@ class Sprite {
   }
   // draw sprite
   draw() {
-    c.fillRect();
+    // fill color 'red'
+    c.fillStyle = "red";
+    // fillRect(x, y, width, height)
+    c.fillRect(this.position.x, this.position.y, 50, 150);
   }
 }
 
@@ -29,4 +32,22 @@ const player = new Sprite({
   y: 0,
 });
 
+// create enemy
+const enemy = new Sprite({
+  x: 400,
+  y: 100,
+});
+
+// draw player, enemy
+player.draw();
+enemy.draw();
+
+// log the player position
 console.log(player);
+
+// creating a infinite loop
+function animate() {
+  window.requestAnimationFrame(animate);
+}
+
+animate();
