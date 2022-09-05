@@ -14,8 +14,11 @@ c.fillRect(0, 0, canvas.width, canvas.height);
 // class
 class Sprite {
   //   when object is instaniated will receive position to set the sprite position when object is created
-  constructor(position) {
+  constructor({ position, velocity }) {
+    // update position, velocity
     this.position = position;
+    this.velocity = velocity;
+    this.height = 150;
   }
   // draw sprite
   draw() {
@@ -24,22 +27,45 @@ class Sprite {
     // fillRect(x, y, width, height)
     c.fillRect(this.position.x, this.position.y, 50, 150);
   }
+
+  // function to draw
+  update() {
+    this.draw();
+    // adding position.y until its hit the ground
+    this.position.y += this.velocity.y;
+
+    // if bottom of sprite >= canvas height (576) then stop increasing velocity.y
+    if (this.position.y + this.height + this.velocity.y >= canvas.height) {
+      this.velocity.y = 0;
+    }
+  }
 }
 
 // create player object with Sprite class
 const player = new Sprite({
-  x: 0,
-  y: 0,
+  position: {
+    x: 0,
+    y: 0,
+  },
+  velocity: {
+    x: 0,
+    y: 1,
+  },
 });
 
 // create enemy
 const enemy = new Sprite({
-  x: 400,
-  y: 100,
+  position: {
+    x: 400,
+    y: 100,
+  },
+  velocity: {
+    x: 0,
+    y: 1,
+  },
 });
 
 // draw player, enemy
-player.draw();
 enemy.draw();
 
 // log the player position
@@ -48,6 +74,13 @@ console.log(player);
 // creating a infinite loop
 function animate() {
   window.requestAnimationFrame(animate);
+  // change fill Style to black(background)
+  c.fillStyle = "black";
+  // fill the entire screen to delete old rectangle to make player and enemy seem to move
+  c.fillRect(0, 0, canvas.width, canvas.height);
+  // call player and enemy update
+  player.update();
+  enemy.update();
 }
 
 animate();
